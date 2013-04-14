@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Network xmlns="http://www.xmos.com"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.xmos.com http://www.xmos.com">
+  <Type>Board</Type>
+  <Name>OpenVizsla Vita</Name>
+
+  <Declarations>
+    <Declaration>core stdcore[2]</Declaration>
+  </Declarations>
+
+  <Packages>
+    <Package id="0" Type="XS1-L2A-QF124">
+      <Nodes>
+        <Node Id="0" InPackageId="0" Type="XS1-L1A" Oscillator="13MHz" SystemFrequency="400MHz">
+          <Boot>
+            <Source Location="SPI:bootFlash"/>
+            <bootee nodeid="1"/>
+          </Boot>
+          <Core Number="0" Reference="stdcore[0]">
+            <Port Location="XS1_PORT_1A" Name="PORT_SPI_MISO"/>
+            <Port Location="XS1_PORT_1B" Name="PORT_SPI_ROM_CS"/>
+            <Port Location="XS1_PORT_1C" Name="PORT_SPI_SCK"/>
+            <Port Location="XS1_PORT_1D" Name="PORT_SPI_MOSI"/>
+
+            <Port Location="XS1_PORT_1I" Name="PORT_ULPI_RST"/>
+            <Port Location="XS1_PORT_1J" Name="PORT_XLED0"/>
+            <Port Location="XS1_PORT_1K" Name="PORT_TARGET_PHY_RESET"/>
+            <Port Location="XS1_PORT_1L" Name="PORT_UART_RX0"/>
+            <Port Location="XS1_PORT_1M" Name="PORT_UART_TX0"/>
+          </Core>
+        </Node>
+        <Node Id="1" InPackageId="1" Type="XS1-L1A" Oscillator="13MHz" SystemFrequency="400MHz">
+          <Boot>
+            <Source Location="xmoslink"/>
+          </Boot>
+          <Core Number="0" Reference="stdcore[1]">
+            <Port Location="XS1_PORT_1A" Name="PORT_I2C_SDA"/>
+            <Port Location="XS1_PORT_1B" Name="PORT_FPGA0"/>
+            <Port Location="XS1_PORT_4A" Name="PORT_FPGA4"/>
+            <!-- XLA 2w -->
+            <Port Location="XS1_PORT_1C" Name="PORT_FPGA1"/>
+            <Port Location="XS1_PORT_1D" Name="PORT_I2C_SCL"/>
+            <Port Location="XS1_PORT_1E" Name="PORT_FPGA2"/>
+            <!-- XLB 5w: to pony; 1F, (4C+4D)/8B, 1G -->
+            <Port Location="XS1_PORT_1H" Name="PORT_FPGA3"/>
+            <Port Location="XS1_PORT_1I" Name="PORT_XBUT"/>
+            <Port Location="XS1_PORT_1J" Name="PORT_XLED1"/>
+            <Port Location="XS1_PORT_8C" Name="PORT_P"/>
+            <Port Location="XS1_PORT_1K" Name="PORT_UART_RX1"/>
+            <Port Location="XS1_PORT_1L" Name="PORT_UART_TX1"/>
+            <Port Location="XS1_PORT_1M" Name="PORT_FTDI"/>
+            <Port Location="XS1_PORT_1N" Name="PORT_FTDO"/>
+            <Port Location="XS1_PORT_1O" Name="PORT_FTMS"/>
+            <Port Location="XS1_PORT_1P" Name="PORT_FTCK"/>
+          </Core>
+        </Node>
+      </Nodes>
+    </Package>
+  </Packages>
+
+  <ExternalDevices>
+    <Device NodeId="0" Core="0" Class="SPIFlash" Name="bootFlash" Type="AT25DF041A">
+      <Attribute Name="PORT_SPI_SS"   Value="PORT_SPI_ROM_CS"/>
+      <Attribute Name="PORT_SPI_CLK"  Value="PORT_SPI_SCK"/>
+      <Attribute Name="PORT_SPI_MOSI" Value="PORT_SPI_MOSI"/>
+      <Attribute Name="PORT_SPI_MISO" Value="PORT_SPI_MISO"/>
+    </Device>
+  </ExternalDevices>
+
+  <Links>
+    <Link Encoding="5wire" Delays="0,1">
+      <LinkEndpoint NodeId="0" Link="XLG"/>
+      <LinkEndpoint NodeId="1" Link="XLF"/>
+    </Link>
+    <Link Encoding="5wire" Delays="0,1">
+      <LinkEndpoint NodeId="0" Link="XLH"/>
+      <LinkEndpoint NodeId="1" Link="XLE"/>
+    </Link>
+    <Link Encoding="5wire" Delays="0,1">
+      <LinkEndpoint NodeId="0" Link="XLE"/>
+      <LinkEndpoint NodeId="1" Link="XLH"/>
+    </Link>
+    <Link Encoding="5wire" Delays="0,1">
+      <LinkEndpoint NodeId="0" Link="XLF"/>
+      <LinkEndpoint NodeId="1" Link="XLG"/>
+    </Link>
+  </Links>
+
+  <JTAGChain>
+    <JTAGDevice NodeId="0"/>
+    <JTAGDevice NodeId="1"/>
+  </JTAGChain>
+
+</Network>
